@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Attacker", "label": "Attacker", "shape": "dot", "title": "attacker"}, {"color": "#97c2fc", "id": "hunger-check-deployment-5488f8b86c-m6ztz", "label": "hunger-check-deployment-5488f8b86c-m6ztz", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "batch-check-job-559wm", "label": "batch-check-job-559wm", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "batch-check-job-92777", "label": "batch-check-job-92777", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "batch-check-job-sgqvt", "label": "batch-check-job-sgqvt", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "batch-check-job-x6q59", "label": "batch-check-job-x6q59", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "build-code-deployment-84fb858df9-kdldn", "label": "build-code-deployment-84fb858df9-kdldn", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "health-check-deployment-5f8b94447d-8bj26", "label": "health-check-deployment-5f8b94447d-8bj26", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "hidden-in-layers-hwck5", "label": "hidden-in-layers-hwck5", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "hidden-in-layers-j8bpx", "label": "hidden-in-layers-j8bpx", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "hidden-in-layers-klw9j", "label": "hidden-in-layers-klw9j", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "hidden-in-layers-tjdnh", "label": "hidden-in-layers-tjdnh", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "internal-proxy-deployment-c59c45d94-lwfhk", "label": "internal-proxy-deployment-c59c45d94-lwfhk", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "kubernetes-goat-home-deployment-cd46cd955-mjp2x", "label": "kubernetes-goat-home-deployment-cd46cd955-mjp2x", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "poor-registry-deployment-7b75fbd7-plb2x", "label": "poor-registry-deployment-7b75fbd7-plb2x", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "system-monitor-deployment-866f697c75-dvxzn", "label": "system-monitor-deployment-866f697c75-dvxzn", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "coredns-7d764666f9-fqjpn", "label": "coredns-7d764666f9-fqjpn", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "etcd-minikube", "label": "etcd-minikube", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "kube-apiserver-minikube", "label": "kube-apiserver-minikube", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "kube-controller-manager-minikube", "label": "kube-controller-manager-minikube", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "kube-proxy-7stjc", "label": "kube-proxy-7stjc", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "kube-scheduler-minikube", "label": "kube-scheduler-minikube", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "storage-provisioner", "label": "storage-provisioner", "shape": "dot", "title": "serviceaccount"}, {"color": "#97c2fc", "id": "cache-store-deployment-8bf8d695b-87f8g", "label": "cache-store-deployment-8bf8d695b-87f8g", "shape": "dot", "title": "pod"}, {"color": "#97c2fc", "id": "hunger-check-service", "label": "hunger-check-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "build-code-service", "label": "build-code-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "health-check-service", "label": "health-check-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "internal-proxy-api-service", "label": "internal-proxy-api-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "internal-proxy-info-app-service", "label": "internal-proxy-info-app-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "kubernetes", "label": "kubernetes", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "kubernetes-goat-home-service", "label": "kubernetes-goat-home-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "poor-registry-service", "label": "poor-registry-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "system-monitor-service", "label": "system-monitor-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "kube-dns", "label": "kube-dns", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "cache-store-service", "label": "cache-store-service", "shape": "dot", "title": "service"}, {"color": "#97c2fc", "id": "vaultapikey", "label": "vaultapikey", "shape": "dot", "title": "secret"}, {"color": "#97c2fc", "id": "webhookapikey", "label": "webhookapikey", "shape": "dot", "title": "secret"}, {"color": "#97c2fc", "id": "goatvault", "label": "goatvault", "shape": "dot", "title": "secret"}, {"color": "#97c2fc", "id": "secret-reader", "label": "secret-reader", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "big-monolith-sa", "label": "big-monolith-sa", "shape": "dot", "title": "serviceaccount"}, {"color": "#97c2fc", "id": "kubeadm:bootstrap-signer-clusterinfo", "label": "kubeadm:bootstrap-signer-clusterinfo", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "system:controller:bootstrap-signer", "label": "system:controller:bootstrap-signer", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "bootstrap-signer", "label": "bootstrap-signer", "shape": "dot", "title": "serviceaccount"}, {"color": "#97c2fc", "id": "kube-proxy", "label": "kube-proxy", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "kubeadm:kubelet-config", "label": "kubeadm:kubelet-config", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "kubeadm:nodes-kubeadm-config", "label": "kubeadm:nodes-kubeadm-config", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "extension-apiserver-authentication-reader", "label": "extension-apiserver-authentication-reader", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "system::leader-locking-kube-controller-manager", "label": "system::leader-locking-kube-controller-manager", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "kube-controller-manager", "label": "kube-controller-manager", "shape": "dot", "title": "serviceaccount"}, {"color": "#97c2fc", "id": "leader-election-controller", "label": "leader-election-controller", "shape": "dot", "title": "serviceaccount"}, {"color": "#97c2fc", "id": "system::leader-locking-kube-scheduler", "label": "system::leader-locking-kube-scheduler", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "kube-scheduler", "label": "kube-scheduler", "shape": "dot", "title": "serviceaccount"}, {"color": "#97c2fc", "id": "system:controller:cloud-provider", "label": "system:controller:cloud-provider", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "cloud-provider", "label": "cloud-provider", "shape": "dot", "title": "serviceaccount"}, {"color": "#97c2fc", "id": "system:controller:token-cleaner", "label": "system:controller:token-cleaner", "shape": "dot", "title": "role"}, {"color": "#97c2fc", "id": "token-cleaner", "label": "token-cleaner", "shape": "dot", "title": "serviceaccount"}, {"color": "#97c2fc", "id": "system:persistent-volume-provisioner", "label": "system:persistent-volume-provisioner", "shape": "dot", "title": "role"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Attacker", "to": "hunger-check-service"}, {"arrows": "to", "from": "Attacker", "to": "build-code-service"}, {"arrows": "to", "from": "Attacker", "to": "health-check-service"}, {"arrows": "to", "from": "Attacker", "to": "internal-proxy-api-service"}, {"arrows": "to", "from": "Attacker", "to": "internal-proxy-info-app-service"}, {"arrows": "to", "from": "Attacker", "to": "kubernetes"}, {"arrows": "to", "from": "Attacker", "to": "kubernetes-goat-home-service"}, {"arrows": "to", "from": "Attacker", "to": "poor-registry-service"}, {"arrows": "to", "from": "Attacker", "to": "system-monitor-service"}, {"arrows": "to", "from": "Attacker", "to": "kube-dns"}, {"arrows": "to", "from": "Attacker", "to": "cache-store-service"}, {"arrows": "to", "from": "Attacker", "to": "big-monolith-sa"}, {"arrows": "to", "from": "Attacker", "to": "bootstrap-signer"}, {"arrows": "to", "from": "Attacker", "to": "kube-controller-manager"}, {"arrows": "to", "from": "Attacker", "to": "leader-election-controller"}, {"arrows": "to", "from": "Attacker", "to": "kube-scheduler"}, {"arrows": "to", "from": "Attacker", "to": "cloud-provider"}, {"arrows": "to", "from": "Attacker", "to": "token-cleaner"}, {"arrows": "to", "from": "Attacker", "to": "storage-provisioner"}, {"arrows": "to", "from": "hunger-check-deployment-5488f8b86c-m6ztz", "to": "vaultapikey"}, {"arrows": "to", "from": "hunger-check-deployment-5488f8b86c-m6ztz", "to": "webhookapikey"}, {"arrows": "to", "from": "batch-check-job-559wm", "to": "goatvault"}, {"arrows": "to", "from": "batch-check-job-92777", "to": "goatvault"}, {"arrows": "to", "from": "batch-check-job-sgqvt", "to": "goatvault"}, {"arrows": "to", "from": "batch-check-job-x6q59", "to": "goatvault"}, {"arrows": "to", "from": "build-code-deployment-84fb858df9-kdldn", "to": "goatvault"}, {"arrows": "to", "from": "health-check-deployment-5f8b94447d-8bj26", "to": "goatvault"}, {"arrows": "to", "from": "hidden-in-layers-hwck5", "to": "goatvault"}, {"arrows": "to", "from": "hidden-in-layers-j8bpx", "to": "goatvault"}, {"arrows": "to", "from": "hidden-in-layers-klw9j", "to": "goatvault"}, {"arrows": "to", "from": "hidden-in-layers-tjdnh", "to": "goatvault"}, {"arrows": "to", "from": "internal-proxy-deployment-c59c45d94-lwfhk", "to": "goatvault"}, {"arrows": "to", "from": "kubernetes-goat-home-deployment-cd46cd955-mjp2x", "to": "goatvault"}, {"arrows": "to", "from": "poor-registry-deployment-7b75fbd7-plb2x", "to": "goatvault"}, {"arrows": "to", "from": "system-monitor-deployment-866f697c75-dvxzn", "to": "goatvault"}, {"arrows": "to", "from": "storage-provisioner", "to": "system:persistent-volume-provisioner"}, {"arrows": "to", "from": "hunger-check-service", "to": "hunger-check-deployment-5488f8b86c-m6ztz"}, {"arrows": "to", "from": "build-code-service", "to": "build-code-deployment-84fb858df9-kdldn"}, {"arrows": "to", "from": "health-check-service", "to": "health-check-deployment-5f8b94447d-8bj26"}, {"arrows": "to", "from": "internal-proxy-api-service", "to": "internal-proxy-deployment-c59c45d94-lwfhk"}, {"arrows": "to", "from": "internal-proxy-info-app-service", "to": "internal-proxy-deployment-c59c45d94-lwfhk"}, {"arrows": "to", "from": "kubernetes-goat-home-service", "to": "kubernetes-goat-home-deployment-cd46cd955-mjp2x"}, {"arrows": "to", "from": "poor-registry-service", "to": "poor-registry-deployment-7b75fbd7-plb2x"}, {"arrows": "to", "from": "system-monitor-service", "to": "system-monitor-deployment-866f697c75-dvxzn"}, {"arrows": "to", "from": "kube-dns", "to": "coredns-7d764666f9-fqjpn"}, {"arrows": "to", "from": "cache-store-service", "to": "cache-store-deployment-8bf8d695b-87f8g"}, {"arrows": "to", "from": "big-monolith-sa", "to": "secret-reader"}, {"arrows": "to", "from": "bootstrap-signer", "to": "system:controller:bootstrap-signer"}, {"arrows": "to", "from": "kube-controller-manager", "to": "system::leader-locking-kube-controller-manager"}, {"arrows": "to", "from": "leader-election-controller", "to": "system::leader-locking-kube-controller-manager"}, {"arrows": "to", "from": "kube-scheduler", "to": "system::leader-locking-kube-scheduler"}, {"arrows": "to", "from": "cloud-provider", "to": "system:controller:cloud-provider"}, {"arrows": "to", "from": "token-cleaner", "to": "system:controller:token-cleaner"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
